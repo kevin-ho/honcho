@@ -35,7 +35,7 @@ class _EmbeddingClient:
             if not api_key:
                 raise ValueError("Gemini API key is required")
             self.client: genai.Client | AsyncOpenAI = genai.Client(api_key=api_key)
-            self.model: str = "gemini-embedding-001"
+            self.model: str = "gemini-embedding-2-preview"
             # Gemini has a 2048 token limit
             self.max_embedding_tokens: int = min(settings.MAX_EMBEDDING_TOKENS, 2048)
             # Gemini batch size is not documented, using conservative estimate
