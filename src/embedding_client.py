@@ -42,13 +42,13 @@ class _EmbeddingClient:
             self.max_batch_size: int = 100
         elif self.provider == "openrouter":
             if api_key is None:
-		api_key = settings.LLM.EMBEDDING_API_KEY or settings.LLM.OPENAI_COMPATIBLE_API_KEY
+                api_key = settings.LLM.EMBEDDING_API_KEY or settings.LLM.OPENAI_COMPATIBLE_API_KEY
             if not api_key:
                 raise ValueError(
                     "Embedding API key (LLM_EMBEDDING_API_KEY or LLM_OPENAI_COMPATIBLE_API_KEY) is required"
                 )
             base_url = (
-		settings.LLM.EMBEDDING_BASE_URL or settings.LLM.OPENAI_COMPATIBLE_BASE_URL or "https://openrouter.ai/api/v1"
+                settings.LLM.EMBEDDING_BASE_URL or settings.LLM.OPENAI_COMPATIBLE_BASE_URL or "https://openrouter.ai/api/v1"
             )
             self.client = AsyncOpenAI(api_key=api_key, base_url=base_url)
             self.model = "openai/text-embedding-3-small"
