@@ -766,6 +766,7 @@ INDUCTION_SPECIALIST_TOOLS: list[dict[str, Any]] = [
     TOOLS["search_messages"],
     # Action tools
     TOOLS["create_observations_inductive"],
+    TOOLS["delete_observations"],
     TOOLS["update_peer_card"],
 ]
 

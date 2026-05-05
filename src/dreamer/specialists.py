@@ -369,7 +369,7 @@ Keep it concise (max 40 entries), deduplicated, and current."""
 
 ## YOUR JOB
 
-Create deductive observations by finding logical implications in what's already known. Think like a detective connecting evidence.
+Create deductive observations by finding logical implications in what's already known, AND consolidate redundant observations to reduce total count. Think like a detective connecting evidence — then cleaning up the case file.
 
 ## PHASE 1: DISCOVERY
 
@@ -389,6 +389,13 @@ When the same fact has different values at different times:
 - "meeting Tuesday" [old] → "meeting moved to Thursday" [new]
 - Create a deductive update observation
 - DELETE the outdated observation immediately
+
+### Duplicate & Near-Duplicate Merging (HIGH PRIORITY)
+When you find multiple observations saying essentially the same thing:
+- "Director prefers concise responses" + "Director likes brevity" + "Director values concise communication"
+→ Create ONE merged observation with all source_ids, then DELETE the originals
+
+This is critical for keeping memory manageable. Always search for existing observations on a topic before creating a new one — if similar observations already exist, merge rather than add.
 
 ### Logical Implications
 Extract implicit information:
@@ -420,8 +427,9 @@ Use `create_observations_deductive`.
 2. Create observations based on what you ACTUALLY FIND, not what you expect
 3. Always include source_ids linking to the observations you're synthesizing
 4. Empty or missing source_ids will be rejected
-5. Delete outdated observations - don't leave duplicates
-6. Quality over quantity - fewer good deductions beat many weak ones"""
+5. Delete outdated and duplicate observations — always check if something similar already exists before creating new observations
+6. When merging duplicates: create one clean merged observation, then delete all originals
+7. Quality over quantity — fewer good deductions beat many weak ones"""
 
     def build_user_prompt(
         self,
@@ -460,7 +468,8 @@ class InductionSpecialist(BaseSpecialist):
     1. Explores observations to understand what's there
     2. Identifies patterns and generalizations across multiple observations
     3. Creates new inductive observations with source linkage
-    4. Updates peer card with high-confidence traits and tendencies
+    4. Consolidates near-duplicate source observations after pattern extraction
+    5. Updates peer card with high-confidence traits and tendencies
     """
 
     name: str = "induction"
@@ -509,7 +518,7 @@ Keep it concise (max 40 entries)."""
 
 ## YOUR JOB
 
-Create inductive observations by finding patterns across multiple observations. Think like a psychologist identifying behavioral tendencies.
+Create inductive observations by finding patterns across multiple observations, AND consolidate redundant source observations. Think like a psychologist identifying behavioral tendencies — then summarizing your case notes.
 
 ## PHASE 1: DISCOVERY
 
@@ -540,6 +549,16 @@ Create inductive observations when you see patterns:
 ### Temporal Patterns
 - "Career goals have remained consistent"
 - "Living situation changes frequently"
+
+### Source Consolidation (HIGH PRIORITY)
+After creating an inductive observation from multiple source observations, DELETE the individual sources that are now fully captured by the new pattern. For example:
+- Source: "Uses vim for editing" [explicit]
+- Source: "Prefers vim over VS Code" [explicit]
+- Source: "Mentioned vim is their favorite editor" [explicit]
+→ Create inductive: "Strongly prefers vim as primary editor"
+→ DELETE all three sources
+
+Only delete sources when the new inductive observation captures their meaning completely. When in doubt, keep the source.
 {peer_card_section}
 
 ## CREATING OBSERVATIONS
@@ -565,7 +584,8 @@ Use `create_observations_inductive`.
 3. Confidence based on evidence count: 2=low, 3-4=medium, 5+=high
 4. Look for HOW things change over time, not just static facts
 5. Include source_ids - always link back to evidence
-6. Empty or missing source_ids will be rejected"""
+6. Empty or missing source_ids will be rejected
+7. After creating a pattern, delete the source observations it fully supersedes — this is how memory stays manageable"""
 
     def build_user_prompt(
         self,
